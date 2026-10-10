@@ -17,7 +17,7 @@ import os, re, time, json
 import pandas as pd
 from openai import OpenAI, RateLimitError, APIError
 
-MODEL        = 'meta-llama/llama-3.2-3b-instruct:free"
+MODEL        = 'meta-llama/llama-3.2-3b-instruct:free'
 RETRY_LIMIT  = 3
 RETRY_DELAY  = 5
 LABELS       = ("Positive", "Negative", "Neutral")
