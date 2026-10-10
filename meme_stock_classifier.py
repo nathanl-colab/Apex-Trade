@@ -80,8 +80,11 @@ def _build_prompt(target):
 def _call_llm(prompt, client):
     for attempt in range(RETRY_LIMIT):
         try:
-            response = client.chat.completions.create(model=MODEL, messages=[{"role": "user", "content": prompt}]
-            raw = response.choices.message.strip().capitalize()
+            response = client.chat.completions.create(
+                model=MODEL, 
+                messages=[{"role": "user", "content": prompt}]
+            )
+            raw = response.choices[0].message.content.strip().capitalize()
             if raw in LABELS:
                 return raw
             for label in LABELS:
