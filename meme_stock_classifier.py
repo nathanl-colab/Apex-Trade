@@ -80,8 +80,8 @@ def _build_prompt(target):
 def _call_llm(prompt, client):
     for attempt in range(RETRY_LIMIT):
         try:
-            response = client.responses.create(model=MODEL, input=prompt)
-            raw = response.output_text.strip().capitalize()
+            response = client.chat.completions.create(model=MODEL, messages=[{"role": "user", "content": prompt}]
+            raw = response.choices.message.strip().capitalize()
             if raw in LABELS:
                 return raw
             for label in LABELS:
@@ -100,17 +100,19 @@ def _extract_ticker(text):
     match = re.search(r'\$([A-Z]{1,5})\b', str(text))
     return match.group(1) if match else None
 
-
 def _get_client(client, api_key):
     if client is not None:
         return client
-    key = api_key or os.environ.get("OPENAI_API_KEY")
+    import streamlit as st
+    key = api_key or st.secrets.get("OPENROUTER_API_KEY")
     if not key:
         raise ValueError(
-            "No OpenAI client or API key provided. Pass client=OpenAI(api_key=...) "
-            "or set the OPENAI_API_KEY environment variable in Replit Secrets."
+            "No API key provided. Please save your key in the Streamlit secrets dashboard panel "
+            "as: OPENROUTER_API_KEY = \"your_key\""
         )
-    return OpenAI(api_key=key)
+    return OpenAI(
+        base_url="https://openrouter.ai",
+        api_key=key
 
 
 def classify_post(text, flair=None, client=None, api_key=None):
