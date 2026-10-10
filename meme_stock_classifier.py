@@ -113,7 +113,7 @@ def _get_client(client, api_key):
     return OpenAI(
         base_url="https://openrouter.ai",
         api_key=key
-
+        )
 
 def classify_post(text, flair=None, client=None, api_key=None):
     """Classify a single WSB post. Returns dict with sentiment, method, ticker, confidence."""
